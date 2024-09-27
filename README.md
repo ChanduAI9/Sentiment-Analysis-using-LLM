@@ -17,8 +17,7 @@ This project is a Python-based web application that processes customer reviews u
 - [Usage](#usage)
 - [API Endpoints](#api-endpoints)
 - [Error Handling](#error-handling)
-- [Future Improvements](#future-improvements)
-- [License](#license)
+
 
 ## Features
 - Upload `.csv` or `.xlsx` files containing customer reviews.
