@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Sentiment Analysis</h1>
+        
+        <!-- File upload form -->
+        <form id="upload-form" class="mt-4">
+            <div class="form-group">
+                <label for="fileInput">Upload CSV/XLSX File:</label>
+                <input type="file" id="fileInput" name="file" class="form-control-file" accept=".csv, .xlsx" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+
+        <div id="results" class="mt-4">
+            <h3>Sentiment Analysis Results:</h3>
+            <p><strong>Positive:</strong> <span id="positive-score">N/A</span></p>
+            <p><strong>Negative:</strong> <span id="negative-score">N/A</span></p>
+            <p><strong>Neutral:</strong> <span id="neutral-score">N/A</span></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('upload-form').onsubmit = async function(event) {
+            event.preventDefault();
+            const fileInput = document.getElementById('fileInput');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file to upload.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/api/upload/', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    document.getElementById('positive-score').textContent = result.positive.toFixed(2);
+                    document.getElementById('negative-score').textContent = result.negative.toFixed(2);
+                    document.getElementById('neutral-score').textContent = result.neutral.toFixed(2);
+                } else {
+                    alert('Error: ' + (result.error || 'Unknown error'));
+                }
+            } catch (error) {
+                alert('An error occurred: ' + error.message);
+            }
+        };
+    </script>
+</body>
+</html>
